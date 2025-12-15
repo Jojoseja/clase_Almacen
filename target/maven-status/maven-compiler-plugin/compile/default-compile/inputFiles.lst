@@ -1,3 +1,9 @@
 /home/jojo/Projects/clase_Almacen/src/main/java/com/josefeyjoo/almacen/Clase_Almacen.java
+/home/jojo/Projects/clase_Almacen/src/main/java/com/josefeyjoo/almacen/model/Articulo.java
+/home/jojo/Projects/clase_Almacen/src/main/java/com/josefeyjoo/almacen/model/Cliente.java
+/home/jojo/Projects/clase_Almacen/src/main/java/com/josefeyjoo/almacen/model/Proveedores.java
+/home/jojo/Projects/clase_Almacen/src/main/java/com/josefeyjoo/almacen/pruebas/AppNav.java
+/home/jojo/Projects/clase_Almacen/src/main/java/com/josefeyjoo/almacen/pruebas/Ventana1.java
+/home/jojo/Projects/clase_Almacen/src/main/java/com/josefeyjoo/almacen/pruebas/Ventana2.java
+/home/jojo/Projects/clase_Almacen/src/main/java/com/josefeyjoo/almacen/pruebas/VentanaController.java
 /home/jojo/Projects/clase_Almacen/src/main/java/com/josefeyjoo/almacen/view/Formulario.java
-/home/jojo/Projects/clase_Almacen/src/main/java/com/josefeyjoo/almacen/view/FormularioClientes.java

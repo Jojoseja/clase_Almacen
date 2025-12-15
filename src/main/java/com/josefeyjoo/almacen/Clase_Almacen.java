@@ -4,6 +4,10 @@
 
 package com.josefeyjoo.almacen;
 
+import com.josefeyjoo.almacen.pruebas.AppNav;
+import com.josefeyjoo.almacen.pruebas.VentanaController;
+import javax.swing.JFrame;
+
 /**
  *
  * @author jojo
@@ -11,6 +15,6 @@ package com.josefeyjoo.almacen;
 public class Clase_Almacen {
 
     public static void main(String[] args) {
-        System.out.println("Hello World!");
+        AppNav.start();
     }
 }
