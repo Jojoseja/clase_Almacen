@@ -4,17 +4,15 @@
 
 package com.josefeyjoo.almacen;
 
-import com.josefeyjoo.almacen.pruebas.AppNav;
-import com.josefeyjoo.almacen.pruebas.VentanaController;
-import javax.swing.JFrame;
+import com.josefeyjoo.almacen.view.AppNav;
+import java.sql.SQLException;
 
 /**
  *
  * @author jojo
  */
 public class Clase_Almacen {
-
-    public static void main(String[] args) {
+    public static void main(String[] args) throws SQLException {
         AppNav.start();
     }
 }
