@@ -84,7 +84,7 @@ public class DBQuery {
         }
     }
     
-    //TODO: Método DELETE, borra el cliente en función del código
+    //Método DELETE, borra el cliente en función del código
     public void deleteCliente(String codigo) throws SQLException {
         String consulta = 
             """
