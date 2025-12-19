@@ -66,16 +66,22 @@ public class ViewModel {
         this.repo = repo;
     }
     
+    public void crearCliente() throws SQLException {
+        repo.getDbquery().crearCliente(uiCliente);
+    }
+    
     public Cliente consultaCliente() throws SQLException{
         return repo.getDbquery().consultaClientePorCodigo(codigo);
     
     }
     
     public void updateCliente() throws SQLException{
-        repo.getDbquery().updateCliente(uiCliente);
+        repo.getDbquery().updateCliente(uiCliente, uiCliente.getCodigo());
     }
     
-    
+    public void deleteCliente() throws SQLException{
+        repo.getDbquery().deleteCliente(codigo);
+    }
     
     
 }
