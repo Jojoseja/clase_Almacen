@@ -551,72 +551,71 @@ public class ClienteFormulario extends javax.swing.JFrame {
 
     private void jButAceActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButAceActionPerformed
         String codigo = codigoText.getText();
-        
-        if (vm.getCodigo()!=null){
-            if (this.modo == MODO.MODIFICACION){
-                try {
-                    Cliente ui = vm.consultaCliente();
-                    
-                    
-                    
-                    
-                    
-                    
-                } catch (SQLException ex) {
-                    System.getLogger(ClienteFormulario.class.getName()).log(System.Logger.Level.ERROR, (String) null, ex);
-                }
-                
-                
-                Cliente cli = new Cliente();
-                cli.setCodigo(codigoText.getText());
-                cli.setNif(nifnText.getText()+niflText.getText());
-                cli.setApellidos(apellidosText.getText());
-                cli.setNombre(nombreText.getText());
-                cli.setDomicilio(domicilioText.getText());
-                cli.setCodigoPostal(cpText.getText());
-                cli.setLocalidad(localidadText.getText());
-                cli.setTelefono(telefonoText.getText());
-                cli.setMovil(movilText.getText());
-                cli.setFax(faxText.getText());
-                cli.setEmail(emailText.getText());
-                cli.setTotalVentas(0);
-                vm.setUiCliente(cli);
-                try {
-                    vm.updateCliente();
-                } catch (SQLException ex) {
-                    System.getLogger(ClienteFormulario.class.getName()).log(System.Logger.Level.ERROR, (String) null, ex);
-                }
-            }
-            
-        }
-        
-        
-        if (this.modo != MODO.NULO) {
-            if (this.modo == MODO.CONSULTA){
-                if (codigoCheck(codigo)){
+        switch(this.modo){
+            case (MODO.NULO):
+                break;
+
+            case (MODO.ALTA):
+                if ((codigoCheck(codigo)) && vm.getCodigo()==null) {
                     try {
                         vm.setCodigo(codigo);
-                        codigoText.setEnabled(false);
+                        if (vm.consultaCliente() == null){
+                            enableFields(true);
+                        };
+                        //Mostrar modal aqui
+                    } catch (SQLException ex) {
                         enableFields(true);
-                        Cliente cli = vm.consultaCliente();
-                        System.out.println(cli);
+                    }
+                } else if(vm.getCodigo()!=null) {
+                    try {
+                        Cliente uiCliente = crearClienteUI();
+                        vm.setUiCliente(uiCliente);
+                        vm.crearCliente();
+                        vm.setCodigo(null);
+                        vm.setUiCliente(null);
+                        reset();
                     } catch (SQLException ex) {
                         System.getLogger(ClienteFormulario.class.getName()).log(System.Logger.Level.ERROR, (String) null, ex);
                     }
-                } else {
-                    System.out.println("CodigoNoValido");
+                }
+                break;
+
+            case (MODO.BAJA):             
+                if (codigoCheck(codigo)){
+                try {
+                    vm.setCodigo(codigo);
+                    if (vm.consultaCliente()!=null){
+                        vm.deleteCliente();
+                        vm.setCodigo(null);
+                    } else {
+                        System.out.println("Error");
+                        }
+                } catch (SQLException ex) {
+                    System.getLogger(ClienteFormulario.class.getName()).log(System.Logger.Level.ERROR, (String) null, ex);
                 }
             }
+                break;
+
+            case (MODO.CONSULTA):
+                if ((codigoCheck(codigo))&& vm.getCodigo()==null){
+                    vm.setCodigo(codigo);
+                    try {
+                        Cliente ui;
+                        ui = vm.consultaCliente();
+                        mostrarClienteUI(ui);
+                        vm.setCodigo(null);
+                    } catch (SQLException ex) {
+                        System.getLogger(ClienteFormulario.class.getName()).log(System.Logger.Level.ERROR, (String) null, ex);
+                    }
+                }
+                break;
+
+            case (MODO.MODIFICACION):
+                break;
+
             
-            
-            if (codigoCheck(codigo)){
-                vm.setCodigo(codigo);
-                codigoText.setEnabled(false);
-                enableFields(true);
-            } else {
-                System.out.println("CodigoNoValido");
-            }
         }
+        
     }//GEN-LAST:event_jButAceActionPerformed
 
     private void codigoTextCaretUpdate(javax.swing.event.CaretEvent evt) {//GEN-FIRST:event_codigoTextCaretUpdate
@@ -910,6 +909,49 @@ public class ClienteFormulario extends javax.swing.JFrame {
         }
         
         return false;
+    }
+    
+    public Cliente crearClienteUI(){
+        float totalVentas;
+        String ventasString = totalText.getText();
+        if (ventasString.isEmpty()){
+            totalVentas = 0;
+        } else {
+            totalVentas = Float.valueOf(ventasString);
+        }
+        Cliente cli = new Cliente();
+        cli.setCodigo(codigoText.getText());
+        cli.setNif(nifnText.getText()+niflText.getText());
+        cli.setApellidos(apellidosText.getText());
+        cli.setNombre(nombreText.getText());
+        cli.setDomicilio(domicilioText.getText());
+        cli.setCodigoPostal(cpText.getText());
+        cli.setLocalidad(localidadText.getText());
+        cli.setTelefono(telefonoText.getText());
+        cli.setMovil(movilText.getText());
+        cli.setFax(faxText.getText());
+        cli.setEmail(emailText.getText());
+        cli.setTotalVentas(totalVentas);
+        
+        return cli;
+    }
+    
+    public void mostrarClienteUI(Cliente cli){
+        String numeroDNI = cli.getNif().substring(0, 8);
+        codigoText.setText(cli.getCodigo());
+        nifnText.setText(numeroDNI);
+        letraDNI();
+        apellidosText.setText(cli.getApellidos());
+        nombreText.setText(cli.getNombre());
+        domicilioText.setText(cli.getDomicilio());
+        cpText.setText(cli.getCodigoPostal());
+        localidadText.setText(cli.getLocalidad());
+        telefonoText.setText(cli.getTelefono());
+        movilText.setText(cli.getMovil());
+        faxText.setText(cli.getFax());
+        emailText.setText(cli.getEmail());
+        totalText.setText(String.valueOf(cli.getTotalVentas()));
+
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
