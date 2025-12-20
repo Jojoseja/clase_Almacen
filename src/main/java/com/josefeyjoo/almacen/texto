@@ -1,0 +1,4 @@
+Todo Desactivado al Entrar a la Apliacion -> Modo NULO
+Al Seleccionar un Modo se Habilita SOLO campo Codigo
+En los Modos ALTA, BAJA, MODIFICACIONES -> Verificar que el código es VÁLIDO al darle a aceptar
+Una vez Codigo es VALIDO -> HABILITAR resto de campos, al darle a aceptar -> Ejecutar la Operacion

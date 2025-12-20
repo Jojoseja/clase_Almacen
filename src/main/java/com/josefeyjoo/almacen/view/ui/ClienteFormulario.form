@@ -57,19 +57,19 @@
             <Property name="text" type="java.lang.String" value="Consultas"/>
           </Properties>
           <SubComponents>
-            <Menu class="javax.swing.JMenu" name="jMenuPorCodigo">
+            <MenuItem class="javax.swing.JMenuItem" name="jMenuPorCodigo">
               <Properties>
                 <Property name="text" type="java.lang.String" value="Por C&#xf3;digo"/>
               </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jMenuPorCodigoActionPerformed"/>
+              </Events>
+            </MenuItem>
+            <Menu class="javax.swing.JMenu" name="jMenuListados">
+              <Properties>
+                <Property name="text" type="java.lang.String" value="Listados"/>
+              </Properties>
               <SubComponents>
-                <MenuItem class="javax.swing.JMenuItem" name="jMenuConCod">
-                  <Properties>
-                    <Property name="text" type="java.lang.String" value="Por C&#xf3;digo"/>
-                  </Properties>
-                  <Events>
-                    <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jMenuConCodActionPerformed"/>
-                  </Events>
-                </MenuItem>
                 <MenuItem class="javax.swing.JMenuItem" name="jMenuConEnt">
                   <Properties>
                     <Property name="text" type="java.lang.String" value="Entre C&#xf3;digos"/>
@@ -79,6 +79,14 @@
                   <Properties>
                     <Property name="text" type="java.lang.String" value="Gr&#xe1;ficos"/>
                   </Properties>
+                </MenuItem>
+                <MenuItem class="javax.swing.JMenuItem" name="jMenuConCod">
+                  <Properties>
+                    <Property name="text" type="java.lang.String" value="Por C&#xf3;digo"/>
+                  </Properties>
+                  <Events>
+                    <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jMenuConCodActionPerformed"/>
+                  </Events>
                 </MenuItem>
               </SubComponents>
             </Menu>

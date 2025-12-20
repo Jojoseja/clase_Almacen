@@ -114,6 +114,8 @@ public class DBQuery {
             cli.setFax(rs.getString("fax"));
             cli.setEmail(rs.getString("email"));
             cli.setTotalVentas(rs.getFloat("total_ventas"));
+        } else {
+            return null;
         }
         return cli;
     }

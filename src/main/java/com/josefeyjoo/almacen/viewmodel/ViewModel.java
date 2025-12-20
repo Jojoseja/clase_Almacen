@@ -70,7 +70,7 @@ public class ViewModel {
         repo.getDbquery().crearCliente(uiCliente);
     }
     
-    public Cliente consultaCliente() throws SQLException{
+    public Cliente consultaCliente(String codigo) throws SQLException{
         return repo.getDbquery().consultaClientePorCodigo(codigo);
     
     }

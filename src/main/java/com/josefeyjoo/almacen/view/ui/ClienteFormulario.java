@@ -12,6 +12,7 @@ import com.josefeyjoo.almacen.viewmodel.ViewModel;
 import java.awt.Color;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -87,10 +88,11 @@ public class ClienteFormulario extends javax.swing.JFrame {
         jSeparator1 = new javax.swing.JPopupMenu.Separator();
         jMenuManVol = new javax.swing.JMenuItem();
         jMenu2 = new javax.swing.JMenu();
-        jMenuPorCodigo = new javax.swing.JMenu();
-        jMenuConCod = new javax.swing.JMenuItem();
+        jMenuPorCodigo = new javax.swing.JMenuItem();
+        jMenuListados = new javax.swing.JMenu();
         jMenuConEnt = new javax.swing.JMenuItem();
         jMenuCodGra = new javax.swing.JMenuItem();
+        jMenuConCod = new javax.swing.JMenuItem();
 
         jMenuItem1.setText("jMenuItem1");
 
@@ -331,6 +333,20 @@ public class ClienteFormulario extends javax.swing.JFrame {
         jMenu2.setText("Consultas");
 
         jMenuPorCodigo.setText("Por Código");
+        jMenuPorCodigo.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuPorCodigoActionPerformed(evt);
+            }
+        });
+        jMenu2.add(jMenuPorCodigo);
+
+        jMenuListados.setText("Listados");
+
+        jMenuConEnt.setText("Entre Códigos");
+        jMenuListados.add(jMenuConEnt);
+
+        jMenuCodGra.setText("Gráficos");
+        jMenuListados.add(jMenuCodGra);
 
         jMenuConCod.setText("Por Código");
         jMenuConCod.addActionListener(new java.awt.event.ActionListener() {
@@ -338,15 +354,9 @@ public class ClienteFormulario extends javax.swing.JFrame {
                 jMenuConCodActionPerformed(evt);
             }
         });
-        jMenuPorCodigo.add(jMenuConCod);
+        jMenuListados.add(jMenuConCod);
 
-        jMenuConEnt.setText("Entre Códigos");
-        jMenuPorCodigo.add(jMenuConEnt);
-
-        jMenuCodGra.setText("Gráficos");
-        jMenuPorCodigo.add(jMenuCodGra);
-
-        jMenu2.add(jMenuPorCodigo);
+        jMenu2.add(jMenuListados);
 
         jMenuBar1.add(jMenu2);
 
@@ -545,28 +555,40 @@ public class ClienteFormulario extends javax.swing.JFrame {
     private void jButCanActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButCanActionPerformed
         // TODO add your handling code here:
         reset();
+        this.modo = MODO.NULO;
+        showCurrentMode();
         enableFields(false);
         codigoText.setEnabled(true);
     }//GEN-LAST:event_jButCanActionPerformed
 
     private void jButAceActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButAceActionPerformed
         String codigo = codigoText.getText();
-        switch(this.modo){
+        if (codigoCheck(codigo)){
+            switch(this.modo){
+                
             case (MODO.NULO):
                 break;
-
+            
+            //TODO: Rehacer Modo
             case (MODO.ALTA):
-                if ((codigoCheck(codigo)) && vm.getCodigo()==null) {
-                    try {
-                        vm.setCodigo(codigo);
-                        if (vm.consultaCliente() == null){
+                if (vm.getCodigo()==null ) {
+                    try {                       
+                        if (vm.consultaCliente(codigo) == null){
+                            vm.setCodigo(codigo);
                             enableFields(true);
-                        };
-                        //Mostrar modal aqui
+                        } else {
+                            //Mostrar modal aqui
+                            JOptionPane.showConfirmDialog(
+                            null,
+                            "hola",
+                            "Advertencia",
+                            1
+                            );
+                        }                        
                     } catch (SQLException ex) {
                         enableFields(true);
                     }
-                } else if(vm.getCodigo()!=null) {
+                } else if (vm.getCodigo()!=null) {
                     try {
                         Cliente uiCliente = crearClienteUI();
                         vm.setUiCliente(uiCliente);
@@ -579,29 +601,32 @@ public class ClienteFormulario extends javax.swing.JFrame {
                     }
                 }
                 break;
-
+                
+            //TODO: Rehacer Modo
             case (MODO.BAJA):             
                 if (codigoCheck(codigo)){
-                try {
-                    vm.setCodigo(codigo);
-                    if (vm.consultaCliente()!=null){
-                        vm.deleteCliente();
-                        vm.setCodigo(null);
-                    } else {
-                        System.out.println("Error");
+                    try {
+                        vm.setCodigo(codigo);
+                        if (vm.consultaCliente(codigo)!=null){
+                            vm.deleteCliente();
+                            vm.setCodigo(null);
+                            reset();
+                        } else {
+                            System.out.println("Error");
                         }
-                } catch (SQLException ex) {
-                    System.getLogger(ClienteFormulario.class.getName()).log(System.Logger.Level.ERROR, (String) null, ex);
-                }
+                    } catch (SQLException ex) {
+                        System.getLogger(ClienteFormulario.class.getName()).log(System.Logger.Level.ERROR, (String) null, ex);
+                    }
             }
                 break;
-
+                
+            //TODO: Rehacer Modo
             case (MODO.CONSULTA):
                 if ((codigoCheck(codigo))&& vm.getCodigo()==null){
                     vm.setCodigo(codigo);
                     try {
                         Cliente ui;
-                        ui = vm.consultaCliente();
+                        ui = vm.consultaCliente(codigo);
                         mostrarClienteUI(ui);
                         vm.setCodigo(null);
                     } catch (SQLException ex) {
@@ -609,12 +634,22 @@ public class ClienteFormulario extends javax.swing.JFrame {
                     }
                 }
                 break;
-
+            
+            //TODO: Rehacer Modo
             case (MODO.MODIFICACION):
                 break;
-
             
+            }
+        } else {
+            //Mostrar modal aqui
+            JOptionPane.showConfirmDialog(
+            null,
+            "Código No Válido",
+            "Cuidao",
+            1
+            );
         }
+        
         
     }//GEN-LAST:event_jButAceActionPerformed
 
@@ -761,6 +796,10 @@ public class ClienteFormulario extends javax.swing.JFrame {
         } 
     }//GEN-LAST:event_domicilioTextCaretUpdate
 
+    private void jMenuPorCodigoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuPorCodigoActionPerformed
+        changeMode(MODO.CONSULTA);
+    }//GEN-LAST:event_jMenuPorCodigoActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -879,6 +918,7 @@ public class ClienteFormulario extends javax.swing.JFrame {
         showCurrentMode();
         enableFields(false);
         vm.setCodigo(null);
+        vm.setUiCliente(null);
         if (mode==MODO.NULO){
             codigoText.setEnabled(false);
         } else {
@@ -937,21 +977,23 @@ public class ClienteFormulario extends javax.swing.JFrame {
     }
     
     public void mostrarClienteUI(Cliente cli){
-        String numeroDNI = cli.getNif().substring(0, 8);
-        codigoText.setText(cli.getCodigo());
-        nifnText.setText(numeroDNI);
-        letraDNI();
-        apellidosText.setText(cli.getApellidos());
-        nombreText.setText(cli.getNombre());
-        domicilioText.setText(cli.getDomicilio());
-        cpText.setText(cli.getCodigoPostal());
-        localidadText.setText(cli.getLocalidad());
-        telefonoText.setText(cli.getTelefono());
-        movilText.setText(cli.getMovil());
-        faxText.setText(cli.getFax());
-        emailText.setText(cli.getEmail());
-        totalText.setText(String.valueOf(cli.getTotalVentas()));
-
+        if (cli.getNif() != null){
+            String numeroDNI = cli.getNif().substring(0, 8);
+            codigoText.setText(cli.getCodigo());
+            nifnText.setText(numeroDNI);
+            letraDNI();
+            apellidosText.setText(cli.getApellidos());
+            nombreText.setText(cli.getNombre());
+            domicilioText.setText(cli.getDomicilio());
+            cpText.setText(cli.getCodigoPostal());
+            localidadText.setText(cli.getLocalidad());
+            telefonoText.setText(cli.getTelefono());
+            movilText.setText(cli.getMovil());
+            faxText.setText(cli.getFax());
+            emailText.setText(cli.getEmail());
+            totalText.setText(String.valueOf(cli.getTotalVentas()));
+        }
+        
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -983,12 +1025,13 @@ public class ClienteFormulario extends javax.swing.JFrame {
     private javax.swing.JMenuItem jMenuConCod;
     private javax.swing.JMenuItem jMenuConEnt;
     private javax.swing.JMenuItem jMenuItem1;
+    private javax.swing.JMenu jMenuListados;
     private javax.swing.JMenu jMenuMan;
     private javax.swing.JMenuItem jMenuManAlt;
     private javax.swing.JMenuItem jMenuManBaj;
     private javax.swing.JMenuItem jMenuManMod;
     private javax.swing.JMenuItem jMenuManVol;
-    private javax.swing.JMenu jMenuPorCodigo;
+    private javax.swing.JMenuItem jMenuPorCodigo;
     private javax.swing.JOptionPane jOptionPane1;
     private javax.swing.JPopupMenu.Separator jSeparator1;
     private javax.swing.JTextField jTextCurMode;
